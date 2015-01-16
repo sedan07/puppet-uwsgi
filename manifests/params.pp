@@ -28,6 +28,7 @@ class uwsgi::params {
             $socket        = '/var/run/uwsgi/uwsgi.socket'
         }
         default: {
+            $app_parent_directory = '/etc/uwsgi'
             $app_directory = '/etc/uwsgi/apps-enabled'
             $pidfile       = '/run/uwsgi/uwsgi.pid'
             $python_dev    = 'python-dev'

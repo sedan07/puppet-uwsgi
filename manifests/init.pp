@@ -176,12 +176,33 @@ class uwsgi (
         require  => Package[$package_name]
     }
 
-    file { $app_directory:
-        ensure  => 'directory',
-        owner   => 'root',
-        group   => 'root',
-        mode    => '0644',
-        require => Package[$package_name]
+    case $::osfamily {
+        redhat: {
+            file { $app_directory:
+                ensure  => 'directory',
+                owner   => 'root',
+                group   => 'root',
+                mode    => '0644',
+                require => Package[$package_name]
+            }
+        }
+        default: {
+            file { $app_parent_directory:
+                ensure  => 'directory',
+                owner   => 'root',
+                group   => 'root',
+                mode    => '0644',
+                require => Package[$package_name]
+            }
+
+            file { $app_directory:
+                ensure  => 'directory',
+                owner   => 'root',
+                group   => 'root',
+                mode    => '0644',
+                require => [ Package[$package_name], File[$app_parent_directory] ]
+            }
+        }
     }
 
     service { $service_name:
