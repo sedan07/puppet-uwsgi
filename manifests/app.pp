@@ -45,6 +45,9 @@ define uwsgi::app (
         mode    => '0644',
         content => template($template),
         require => Package[$::uwsgi::package_name],
-        notify  => Service[$::uwsgi::service_name]
+    }
+
+    if $manage_service == true {
+        File["${::uwsgi::app_directory}/${title}.ini"] ~> Service[$::uwsgi::service_name]
     }
 }

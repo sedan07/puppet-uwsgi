@@ -91,6 +91,7 @@ class uwsgi (
     $service_enable      = $uwsgi::params::service_enable,
     $service_provider    = $uwsgi::params::service_provider,
     $manage_service_file = $uwsgi::params::manage_service_file,
+    $manage_service      = $uwsgi::params::manage_service,
     $config_file         = $uwsgi::params::config_file,
     $log_file            = $uwsgi::params::log_file,
     $app_directory       = $uwsgi::params::app_directory,
@@ -205,21 +206,23 @@ class uwsgi (
         }
     }
 
-    service { $service_name:
-        ensure     => $service_ensure,
-        enable     => $service_enable,
-        hasrestart => true,
-        hasstatus  => true,
-        provider   => $service_provider,
-        require    => [
-            Package[$package_name],
-            File[$config_file],
-            File[$service_file_real]
-            ],
-        subscribe  => [
-            File[$config_file],
-            File[$service_file_real]
-            ]
+    if $manage_service == true {
+	    service { $service_name:
+		ensure     => $service_ensure,
+		enable     => $service_enable,
+		hasrestart => true,
+		hasstatus  => true,
+		provider   => $service_provider,
+		require    => [
+		    Package[$package_name],
+		    File[$config_file],
+		    File[$service_file_real]
+		    ],
+		subscribe  => [
+		    File[$config_file],
+		    File[$service_file_real]
+		    ]
+	    }
     }
 
     # finally, configure any applications necessary

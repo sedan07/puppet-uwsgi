@@ -14,6 +14,7 @@ class uwsgi::params {
     $service_enable      = true
     $service_provider    = 'upstart'
     $manage_service_file = true
+    $manage_service      = true
     $config_file         = '/etc/uwsgi.ini'
     $install_pip         = true
     $install_python_dev  = true
